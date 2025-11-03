@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, FlatList, ActivityIndicator, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Api, Producto } from "../servicio/Api";
 import BotonAtras from "../componentes/BotonAtras";
+import ProductoCard from "../componentes/ProductoCard";
 
 export default function PantallaListaProductos() {
   const navigation = useNavigation<any>();
@@ -36,25 +37,16 @@ export default function PantallaListaProductos() {
       <BotonAtras destino="Home" />
 
       <FlatList
-        data={productos}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ paddingTop: 60 }} // ← deja espacio para el botón
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.item}
-            onPress={() => navigation.navigate("Detalle", { id: item.id })}
-          >
-            <View style={styles.row}>
-              <Image source={{ uri: item.image }} style={styles.imagen} />
-
-              <View style={{ flex: 1 }}>
-                <Text style={styles.nombre} numberOfLines={1}>{item.title}</Text>
-                <Text style={styles.precio}>${item.price}</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+      data={productos}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => (
+        <ProductoCard
+          item={item}
+          onPress={() => navigation.navigate("Detalle", { id: item.id })}
+        />
+      )}
+      contentContainerStyle={{ paddingTop: 70 }} 
+    />
     </SafeAreaView>
   );
 }
